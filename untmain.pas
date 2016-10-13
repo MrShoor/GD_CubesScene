@@ -7,7 +7,8 @@ interface
 
 uses
   LCLType, Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  avTypes, avRes, avContnrs, avContnrsDefaults, avContext, avTess, avTexLoader, avMesh, mutils, avCameraController;
+  ExtCtrls, avTypes, avRes, avContnrs, avContnrsDefaults, avContext, avTess,
+  avTexLoader, avMesh, mutils, avCameraController;
 
 type
   { TmeshVert }
@@ -74,6 +75,7 @@ type
 
   TfrmMain = class(TForm)
     ApplicationProperties1: TApplicationProperties;
+    pnlOuput: TPanel;
     procedure ApplicationProperties1Idle(Sender: TObject; var Done: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -120,8 +122,8 @@ type
     function Convert(const meshVert: IMeshVertices): ImeshVertArr;
 
     procedure DoZSort;
-  protected
   public
+    procedure CreateWnd; override;
     procedure EraseBackground(DC: HDC); override;
   end;
 
@@ -238,6 +240,14 @@ begin
     else
       FGAPI := apiDX11;
   end;
+  if Key = VK_ESCAPE then Close;
+  if Key = VK_TAB then
+  begin
+    if BorderStyle = bsNone then
+      BorderStyle := bsSizeable
+    else
+      BorderStyle := bsNone;
+  end;
 end;
 
 procedure TfrmMain.FormPaint(Sender: TObject);
@@ -247,6 +257,7 @@ end;
 
 procedure TfrmMain.Sync3DAPI;
 begin
+  FMain.Window := Handle;
   if FMain.Inited3D then
     if FMain.ActiveApi <> FGAPI then
       FMain.Free3D;
@@ -311,7 +322,7 @@ procedure TfrmMain.UpdateFPS;
       s := 'WARP device, FPS: ('
     else
       s := 'HARDWARE device, FPS: (';
-    Caption := s + IntToStr(n) + ')'
+    pnlOuput.Caption := s + IntToStr(n) + ')'
   end;
 var curr, delta: Int64;
 begin
@@ -514,6 +525,12 @@ begin
   cmp := TmeshInstComparer.Create(m, True);
   glasscubes.Sort(cmp);
   FVBCubeGlassInst.Invalidate;
+end;
+
+procedure TfrmMain.CreateWnd;
+begin
+  inherited CreateWnd;
+  FMain.Window := Handle;
 end;
 
 procedure TfrmMain.EraseBackground(DC: HDC);

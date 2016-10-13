@@ -3,15 +3,27 @@ object frmMain: TfrmMain
   Height = 610
   Top = 130
   Width = 838
+  BorderStyle = bsNone
   Caption = 'frmMain'
+  ClientHeight = 610
+  ClientWidth = 838
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
   OnPaint = FormPaint
   LCLVersion = '1.6.0.4'
+  WindowState = wsMaximized
+  object pnlOuput: TPanel
+    Left = 0
+    Height = 24
+    Top = 0
+    Width = 256
+    Caption = 'pnlOuput'
+    TabOrder = 0
+  end
   object ApplicationProperties1: TApplicationProperties
     OnIdle = ApplicationProperties1Idle
-    left = 167
-    top = 120
+    left = 48
+    top = 24
   end
 end
