@@ -1,0 +1,2 @@
+DX_avMesh RCDATA "!Out\DX_avMesh.hlsl"
+DX_Glass RCDATA "!Out\DX_Glass.hlsl"
